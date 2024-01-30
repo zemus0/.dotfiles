@@ -1,0 +1,25 @@
+#!/bin/bash
+import -colors 1 /tmp/resolution.png
+info=$(identify /tmp/resolution.png)
+resolution=$(echo $info | awk -F"[+ ]" '{print $3}')
+offset=$(echo $info | awk -F"[+ ]" '{print $5 "," $6}')
+
+audio_device="$(pacmd list-sources | grep -PB 1 "analog.*monitor>" | head -n 1 | perl -pe 's/.* //g')"
+
+base_folder=/home/zem/Videos/Recordings/$( date '+%Y-%m-%d')
+file=$(date '+%H-%M-%S')_recording
+temp=/tmp/recordings
+mkdir -p $temp
+
+ffmpeg -loglevel quiet -video_size $resolution -framerate 30 -f x11grab -thread_queue_size 1024 -i :0.0+$offset -c:v libx264rgb -crf 0 -preset ultrafast -b:v 5M "$temp/$file-video.mkv" &
+ffmpeg -f pulse -thread_queue_size 1024 -i $audio_device -ac 2 -b:a 192k "$temp/$file-audio.wav"
+
+killall ffmpeg
+sleep 1
+
+mkdir -p $base_folder
+ffmpeg -i "$temp/$file-video.mkv" -i "$temp/$file-audio.wav" -c:v h264 -qp 18 -f mp4 -shortest "$base_folder/$file.mp4"
+
+rm "$temp/$file-video.mkv" "$temp/$file-audio.wav"
+
+#ffmpeg -vaapi_device /dev/dri/renderD128 -video_size $resolution -framerate 30 -f x11grab -thread_queue_size 2048 -i :0.0+$offset -f pulse -thread_queue_size 2048 -i $audio_device -ac 2 -vf 'format=nv12,hwupload' -c:v h264_vaapi -qp 20 -f mp4 -y "$base_folder/$file.mp4"

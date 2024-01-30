@@ -1,0 +1,6 @@
+[Unit]
+Description=Back up folders into Misc_Archives
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /home/zem/.dotfiles/backup/backup_folder

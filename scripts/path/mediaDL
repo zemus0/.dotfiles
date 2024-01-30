@@ -1,0 +1,140 @@
+#!/bin/bash
+
+ytdlpMp4Arg="(bestvideo[vcodec^=av01][height>=1080][fps>30]/bestvideo[vcodec=vp9.2][height>=1080][fps>30]/bestvideo[vcodec=vp9][height>=1080][fps>30]/bestvideo[vcodec^=av01][height>=1080]/bestvideo[vcodec=vp9.2][height>=1080]/bestvideo[vcodec=vp9][height>=1080]/bestvideo[height>=1080]/bestvideo[vcodec^=av01][height>=720][fps>30]/bestvideo[vcodec=vp9.2][height>=720][fps>30]/bestvideo[vcodec=vp9][height>=720][fps>30]/bestvideo[vcodec^=av01][height>=720]/bestvideo[vcodec=vp9.2][height>=720]/bestvideo[vcodec=vp9][height>=720]/bestvideo[height>=720]/bestvideo)+(bestaudio[acodec=m4a]/bestaudio)/best"
+
+args=($@)
+
+link=""
+path="$PWD"
+fileDownload="vid"
+timestamp="false"
+timeStart=""
+timeEnd=""
+thumbnail=""
+mp3Args=""
+
+time_to_sec(){
+    declare -n __return=$1
+    local IFS=':'
+    local sect=($2)
+    local sec=$(( 10#${sect[2]} ))
+    sec=$(( $sec + 10#${sect[1]} * 60 ))
+    sec=$(( $sec + 10#${sect[0]} * 3600 ))
+    __return="$sec"
+}
+
+get_time_diff() (
+
+    sec_to_time() {
+        declare -n __return=$1
+        local secs=$2
+        local hours=$(( 10#$secs / 3600 ))
+        hours=$(printf "%02d" "$hours")
+
+        secs=$(( $secs - 10#$hours * 3600 ))
+        local minutes=$(( $secs / 60 ))
+        minutes=$(printf "%02d" "$minutes")
+
+        secs=$(( $secs - 10#$hours * 3600 - 10#$minutes * 60 ))
+        secs=$(printf "%02d" "$secs")
+        __return="$hours:$minutes:$secs"
+    }
+
+    time_to_sec from "$1"
+    time_to_sec to "$2"
+
+    if (( $from >= $to )); then
+        echo "-1"
+    else
+        diff=$(( $to - $from ))
+
+        sec_to_time out $diff
+        echo "$out"
+    fi
+)
+
+for ((i=0; i <= ${#args[@]}; i++));
+do
+	if [[ "${args[i]}" == "--help" ]]; then
+        echo "--vid : download video (default)
+--audio : download audio only
+--mp3 : download final audio file as mp3
+--time : download in range of time (start end) (00:01:20 00:00:04)
+--thumbnail : embed thumbnail into final file
+-f : chosen format (vID+aID)
+-o : output path
+-i : input link "
+	    exit
+
+	elif [[ "${args[i]}" == "-o" ]]; then
+		path="${args[i+1]}"
+
+    elif [[ "${args[i]}" == "-i" ]]; then
+        link="${args[i+1]}"
+
+    elif [[ "${args[i]}" == "-f" ]]; then
+        ytdlpMp4Arg="${args[i+1]}"
+
+    elif [[ "${args[i]}" == "--vid" ]];then
+		fileDownload="vid"
+
+	elif [[ "${args[i]}" == "--audio" ]];then
+		fileDownload="audio"
+
+	elif [[ "${args[i]}" == "--time" ]];then
+		timestamp="true"
+		timeStart="${args[i+1]}"
+		timeEnd="${args[i+2]}"
+
+	elif [[ "${args[i]}" == "--thumbnail" ]]; then
+		thumbnail="--embed-thumbnail"
+
+	elif [[ "${args[i]}" == "--mp3" ]]; then
+        mp3Args="--audio-quality 0 --audio-format mp3"
+
+    elif [[ "${args[i]}" == -* ]]; then
+        echo "Unknown Options ${args[i]}" >&2
+        exit
+    fi
+done
+
+if [[ $link == "" ]]; then
+    echo "Link missing, use -i" >&2
+    exit
+elif [[ ( $timestamp == "true" ) && ( $timeStart == "" || $timeEnd == "" ) ]]; then
+    echo "missing agrument for timestamp (start end) (00:01:20 00:02:04)" >&2
+    exit
+fi
+
+
+if [[ "$fileDownload" == "vid" ]]; then
+	if [[ "$timestamp" == "true" ]]; then
+        time_to_sec from "$timeStart"
+        time_to_sec to "$timeEnd"
+#        timeDiff=$(get_time_diff $timeStart $timeEnd)
+#        segment=($(yt-dlp --youtube-skip-dash-manifest -f "$ytdlpMp4Arg" -g $link | tr " " "\n"))
+#        if [[ "$timeDiff" == "-1" ]]; then
+#            echo "Input error, time start is bigger than ending time" >&2
+#            exit
+#        fi
+#		fileName=$(yt-dlp --get-filename -o "%(title)s.%(ext)s" $link)
+#        ffmpeg -ss "$timeStart" -i "${segment[0]}" -ss "$timeStart" -i "${segment[1]}" -map 0:v -map 1:a -to "$timeDiff" -c copy "$path/$fileName"
+        yt-dlp --youtube-skip-dash-manifest --download-sections "*$from-$to" -o "$path/%(title)s [$from-$to].%(ext)s" -f "$ytdlpMp4Arg" $link
+    else
+		yt-dlp --retries "infinite" -f "$ytdlpMp4Arg" $thumbnail -o "$path/%(title)s.%(ext)s" $link
+	fi
+
+elif [[ "$fileDownload" == "audio" ]]; then
+    if [[ "$timestamp" == "true" ]]; then
+        timeDiff=$(get_time_diff $timeStart $timeEnd)
+        segment=($(yt-dlp --youtube-skip-dash-manifest -f "$ytdlpMp4Arg" -g $link | tr " " "\n"))
+        if [[ "$timeDiff" == "-1" ]]; then
+            echo "Input error, time start is bigger than ending time" >&2
+            exit
+        fi
+		fileName=$(yt-dlp --get-filename -o "%(title)s.mp3" $link)
+        ffmpeg -ss "$timeStart" -i "${segment[1]}" -to "$timeDiff" -c mp3 "$path/$fileName"
+    else
+        yt-dlp -o "$path/%(title)s.%(ext)s" -x $thumbnail $mp3Args $link
+	fi
+fi

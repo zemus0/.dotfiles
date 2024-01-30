@@ -1,0 +1,31 @@
+#!/bin/bash
+#set -x
+
+get_input_sinks(){
+    declare -n __return=$1
+
+    local val=$(pactl list sink-inputs | egrep "(Volume|Sink Latency|application.process.id)" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+
+    local IFS=$'\n'
+    array=($val)
+
+    declare -a array_output
+    for ((i=0; i < ${#array[@]}; i+=3)); do
+        local output=""
+        output="$(echo ${array[i]} | awk '{print $3+$10}') "
+        output+="$(echo ${array[i+1]} | awk '{print $3}') "
+        output+="$(echo ${array[i+2]} | awk '{print substr($3, 2, length($3)-2)}')"
+        array_output+=("$output")
+    done
+    __return['one']="1"
+    __return['two']="2"
+}
+
+declare -A array_in
+
+get_input_sinks array_in
+
+echo hi
+mpv --mute ~/Pictures/wallpapers/AmeBladeRunnerWSound_optimize.mp4 &
+sleep 1
+echo po $1 ggg

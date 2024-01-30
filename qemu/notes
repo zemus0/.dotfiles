@@ -1,0 +1,4 @@
+https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF
+looking glass
+
+need to use .ppk file instead of openssh private key for plink.exe to detach mouse/keyboard from guest

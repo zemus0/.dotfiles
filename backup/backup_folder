@@ -1,0 +1,7 @@
+#!/bin/bash
+rsync -a \
+    ~/{Music,Videos,Memes,Documents} /backup
+
+rsync -a ~/Pictures/Wallpapers /backup
+
+7z u /backup/runelite-screenshot.7z $HOME/.runelite/screenshots

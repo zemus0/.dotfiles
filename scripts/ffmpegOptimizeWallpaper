@@ -1,0 +1,17 @@
+// create a temp dir and upscale all the frames.
+mkdir -p /tmp/upscaled && waifu2x-ncnn-vulkan -v -i frames/ -o /tmp/upscaled/ -m ~/Programs/waifu2x-ncnn-vulkan/models/models-upconv_7_anime_style_art_rgb -n 3 -s 4
+
+// turn all the frames into a mpv
+ffmpeg -r 30 -f image2 -s 1440x3200 -i %04d.png -c:v libx264 -crf 18 -pix_fmt yuv420p ../test.mp4
+
+// add this into the command bellow if changing the frame rate from 30 to something else
+# -filter:v "minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=18'" - changing framerate only
+
+// optimize the mp4
+ffmpeg -i input.mp4 -tune fastdecode -profile:v main -crf 18 -maxrate 8M -bufsize 4M -bf 0 -c:v libx264 output.mp4
+// perhaps more options to test things out
+// -preset veryslow
+// this preset might introduct artifacts into some videos
+
+//command to put everything together and optimize them
+ffmpeg -r 8 -f image2 -i %04d.png -s 1920x1080 -tune fastdecode -profile:v main -maxrate 8M -bufsize 4M -bf 0 -c:v libx264 -crf 18 -preset veryslow -pix_fmt yuv420p ../output2.mp4

@@ -1,0 +1,168 @@
+#!/bin/bash
+#set -x
+
+toggleMuteMpv(){
+    echo '{ "command": ["cycle", "mute"] }' | socat - $socket_path
+}
+
+togglePauseMpv() {
+    echo '{ "command": ["cycle", "pause"] }' | socat - $socket_path
+}
+
+getInputSinks(){
+    declare -n __return=$1
+    declare -a output_arr
+    local output_str=""
+    local sinks=$(pactl list sink-inputs | egrep "(Corked|Volume|application.process.id)")
+
+    local IFS=$'\n'
+    array=($sinks)
+
+    for ((i=0; i < ${#array[@]}; i+=3)); do
+        output_str="$(echo ${array[i]} | awk '{gsub("no","0",$2); gsub("yes","1",$2); print $2}') "
+        output_str+="$(echo ${array[i+1]} | awk '{print $3+$10}') "
+        output_str+="$(echo ${array[i+2]} | awk '{print substr($3, 2, length($3)-2)}')"
+        output_arr+=("$output_str")
+    done
+
+    __return=("${output_arr[@]}")
+}
+
+get_nvidia_gpu_usage(){
+    nvidia-smi -q | awk 'c&&c--; /Utilization/{c=4}'
+}
+
+getCpuJiffies(){
+    declare -n __return=$1
+    local jiffies=$(cat /proc/stat | head -n 1)
+    local jiffies_total=$(echo $jiffies | awk '{print $2+$3+$4+$5+$6+$7+$8}')
+    local jiffies_work=$(echo $jiffies | awk '{print $2+$3+$4}')
+
+    __return="$jiffies_total $jiffies_work"
+}
+
+getWallpaper(){
+    declare -n __return=$1
+    local path=$2
+
+    if [[ -d $path ]]; then
+        local files=($(ls $path | egrep '*.mp4'))
+        if (( ${#files[@]} == 0 )); then
+            echo Folder is empty or there is no mp4 files >&2
+        fi
+        __return=${files[RANDOM%${#files[@]}]}
+    elif [[ $path == *".mp4" ]]; then
+        __return="$path"
+    else
+        echo Unknown input, only mp4 or folder are accepts >&2
+    fi
+}
+
+launchWallpaper(){
+
+    declare -n __return_dict=$1
+
+    local video_resolution=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 $wallpaper_file)
+
+    local launch_wallpaper_cmd="mpv --input-ipc-server=$socket_path $hw_accel $loudness_equalization -wid WID $wallpaper_file --no-config --no-osc --no-osd-bar --loop-file --volume=$volume_level --player-operation-mode=cplayer --panscan=1.0 --no-input-default-bindings"
+
+    xwinwrap -ov -ni -nf -st -sp -b -un -g $video_resolution+0+0 -- $launch_wallpaper_cmd &
+    local xwin_pid=$!
+    # sleep for 1 second so the wallpaper can get started before grabbing it's pid
+
+    local search_cmd="pgrep -xf '${launch_wallpaper_cmd/WID/0x[0-9]+}'"
+    local search_cmd_v2="${search_cmd//\'/\"}"
+    local mpv_pid=$(eval $search_cmd_v2)
+
+    while [[ $mpv_pid == '' ]]; do
+        sleep 0.1
+        mpv_pid=$(eval $search_cmd_v2)
+    done
+
+    __return_dict['xwinwrap']=$xwin_pid
+    __return_dict['wallpaper']=$mpv_pid
+}
+
+wallpaper_path=""
+wallpaper_file=""
+hw_accel=""
+loudness_equalization=""
+declare -i volume_level=100
+declare -i pause_cpu_usage=35
+
+socket_path="/tmp/animated_wallpaper_mpvsocket"
+
+args=($@)
+for ((i=0; i <= ${#args[@]}; i++)); do
+   case ${args[i]} in
+        "-i")
+            wallpaper_path=${args[i+1]}
+            getWallpaper wallpaper_file $wallpaper_path
+            ;;
+        "--hwaccel")
+            hw_accel="--hwdec=auto-safe"
+            ;;
+        "--equalize")
+            loudness_equalization="--af-add=dynaudnorm=g=5:f=500:r=0.9:p=0.5"
+            ;;
+        "--volume")
+            volume_level=${args[i+1]}
+            ;;
+        "--pause-cpu-usage")
+            pause_cpu_usage=${args[i+1]}
+            ;;
+   esac
+done
+
+if [[ $wallpaper_file != *[a-zA-Z0-9]* ]]; then
+    echo Missing -i argument, path to wallpaper is needed >&2
+    exit
+fi
+
+declare -i paused=0
+declare -i muted=0
+declare -a input_sinks
+declare -A pID_dict
+
+launchWallpaper pID_dict
+
+while :; do
+    getCpuJiffies jiffies_start
+
+    sleep 1
+
+    # 0: Corked, 0 is not paused , 1 is paused
+    # 1;Volume, 2: pID
+    getInputSinks input_sinks
+
+    for item in "${input_sinks[@]}" ;do
+
+        sink=(${item[@]})
+        if (( ${sink[0]} == 1 || ${sink[1]} == 0 )); then
+            if (( $muted == 1 )); then
+                toggleMuteMpv
+                muted=0
+            fi
+        elif (( ${pID_dict['wallpaper']} != ${sink[2]} )); then
+            if (( $muted == 0 )); then
+                toggleMuteMpv
+                muted=1
+            fi
+            break
+        fi
+    done
+
+    getCpuJiffies jiffies_end
+    jiffies_work_diff=$(echo $jiffies_start $jiffies_end | awk '{print $4-$2}')
+    jiffies_total_diff=$(echo $jiffies_start $jiffies_end | awk '{print $3-$1}')
+    ((cpu_usage=100*$jiffies_work_diff/$jiffies_total_diff))
+
+    if (( $cpu_usage >= $pause_cpu_usage && $paused == 0 )); then
+        togglePauseMpv
+        paused=1
+    elif [[ $cpu_usage < $pause_cpu_usage && $paused == 1 ]]; then
+        togglePauseMpv
+        paused=0
+    fi
+
+done

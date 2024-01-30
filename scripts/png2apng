@@ -1,0 +1,2 @@
+convert -delay 2 -dispose Background -loop 0 *.png output.gif
+convert output.gif -resize 320x320 -fuzz 10% -layers Optimize result.gif

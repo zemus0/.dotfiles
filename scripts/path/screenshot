@@ -1,0 +1,24 @@
+#!/usr/bin/bash
+#https://unix.stackexchange.com/questions/233345/
+
+base_folder=/home/zem/Pictures/screenshots/$( date '+%Y-%m-%d')
+file_path=${base_folder}/$(date '+%H-%M-%S')_screenshot.png
+params=""
+
+if [[ $1 == *"a"* ]]; then
+    params="-window root"
+elif [[ $1 == *"f"* ]]; then
+    params="-window $(xdotool getwindowfocus -f)"
+fi
+
+if [[ $1 == *"r"* ]]; then
+    params+='-resize 200x200<'
+fi
+
+if [[ $1 == *"s"* ]]; then
+    mkdir -p ${base_folder}
+    import ${params} ${file_path}
+    xclip -selection clipboard -target image/png -i < ${file_path}
+else
+    import -quality 80 ${params} png:- | xclip -selection clipboard -target image/png
+fi

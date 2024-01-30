@@ -1,0 +1,66 @@
+#!/bin/bash
+
+maxSecs=$1
+[[ $maxSecs == "" ]] && echo "Need agrument for seconds to be record" && exit
+
+import -colors 1 /tmp/resolution.png
+info=$(identify /tmp/resolution.png)
+resolution=$(echo $info | awk -F"[+ ]" '{print $3}')
+offset=$(echo $info | awk -F"[+ ]" '{print $5 "," $6}')
+
+mkdir -p /tmp/recordings
+touch /tmp/recordings/list.txt
+echo -n "" > /tmp/recordings/list.txt
+secs=0
+out=0
+
+echo "[Any key] to quit recording"
+while : ;
+do
+	((out++))
+	echo -ne "\rRecording... $out  "
+	
+	ffmpeg -loglevel quiet -video_size $resolution -framerate 30 -f x11grab -thread_queue_size 1024 -i :0.0+$offset -f alsa -thread_queue_size 1024 -i pulse -c:v libx264rgb -crf 0 -preset ultrafast -c:a aac -t 1 -y "/tmp/recordings/$out.mkv" &
+	
+	if [[ ${merge[0]} != "$out.mkv" ]]; then
+		merge=("$out.mkv" "${merge[@]}")	
+	fi
+
+	if (( ${#merge[@]} > $maxSecs )); then
+		unset merge[-1]
+	fi
+
+	if [[ "$out" == $maxSecs ]];then
+		out=0
+	fi
+
+	read -t 1 -n 1 key
+	
+	if [[ $key != "" ]]
+	then
+		echo ""
+		
+		read -n ${#maxSecs} -p "Seconds to save: [1-$maxSecs] " key
+		((secs=$maxSecs-$key))
+
+		echo ""
+		echo "Quiting"
+		break
+	fi
+done
+sleep 1
+
+for i in ${merge[@]:($secs)}
+do
+	echo "file '/tmp/recordings/$i'" >> /tmp/recordings/list.txt 
+done
+echo "Merging..."
+
+vidpath="$HOME/Videos/Record_$secs_secs_$(date '+%H-%M-%S')"
+
+ffmpeg -f concat -safe 0 -i /tmp/recordings/list.txt -c:v libvpx-vp9 -c:a libopus -y "$vidpath.webm"
+
+size=$(du -h /tmp/recordings | awk -F"[+\t]" '{print $1}')
+read -n 1 -p "Remove temporary files? [Y/N] (${size}) " removeTemp
+
+[[ "${removeTemp,,}" == 'y' ]] && echo -n "" && echo "Removing temp folder after 60 seconds" && sleep 60 && rm -rf /tmp/recordings &

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+echo -n "" > completed.txt
+
+files=$(find /home/zem/archive2 -type f | egrep '*.(mkv|mp4|webm)')
+
+IFS=$'\n'
+
+for item in $files
+do
+	codec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 $item)
+	bit_rate=$(ffprobe -v error -show_entries format=bit_rate -of default=noprint_wrappers=1:nokey=1  $item)
+	((bit_rate=$bit_rate/2000))
+	file_name=$(ffprobe -v error -show_entries format=filename -of default=noprint_wrappers=1:nokey=1  $item)
+	file_name=${file_name%.*}
+
+	if [[ "${codec,,}" != *'hevc'* && "${codec,,}" != *'h265'* && "${codec,,}" != *'vp9'* ]]
+	then
+
+		echo $file_name >> completed.txt
+		echo $codec $bit_rate >> completed.txt
+		echo "---------------------------------" >> completed.txt
+		sleep 2
+		ffmpeg -i $item -c:v libvpx-vp9 -crf 30 -b:v "${bit_rate}k" -c:a libopus -b:a 128k -row-mt 1 ${file_name}_vp9.webm
+	fi
+done

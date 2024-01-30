@@ -1,0 +1,10 @@
+[Unit]
+Description=Back up folders into Backup 
+
+[Timer]
+OnCalendar=weekly
+Persistent=true
+Unit=backup.service
+
+[Install]
+WantedBy=timers.target

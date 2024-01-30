@@ -1,0 +1,13 @@
+#!/bin/bash
+
+while :; do
+    read -n 1 -t 1 input
+    if [[ $input == 'd' ]]; then
+        rm -f /tmp/*.mkv
+        echo deleted video
+    fi
+    size=$(ls -sS /tmp/*.mkv 2> /dev/null | awk '{print $1}')
+    if (( size >= 1500000 )); then
+        echo -ne "Warning size $size"\\r
+    fi
+done

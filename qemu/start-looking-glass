@@ -1,0 +1,17 @@
+#!/bin/bash
+resolution="1680x1050"
+#resolution="1920x1080"
+mic=""
+if [[ "$2" == "mic:allow" ]]; then
+    mic="allow"
+elif [[ "$2" == "mic:deny" ]]; then
+    mic="deny"
+else
+    mic="prompt"
+fi
+
+if [[ "$1" == "-s" ]]; then
+    looking-glass-client spice:audio=yes audio:micDefault=$mic -s win:size=$resolution
+else
+    looking-glass-client input:rawMouse=true audio:micDefault=$mic win:size=$resolution
+fi

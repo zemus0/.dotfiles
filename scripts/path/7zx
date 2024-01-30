@@ -1,0 +1,25 @@
+#!/bin/bash
+
+extract(){
+    zipname=$(echo "$1" | rev | cut -f 1 -d '/' | cut -f 2- -d '.' | rev )
+    tempname="$zipname-temp" 
+    echo "Checking archive: $zipname for multiple files in root"
+
+    7z x -o"$tempname" "$1"
+
+    if [[ $(ls -A $tempname | wc -l) != "1" ]]; then
+        echo "Multiple files detected"
+        mv "$tempname" "$zipname"
+    else
+        echo "All files are packages neatly"
+        mv "$tempname"/* .
+        rmdir "$tempname"
+    fi
+}
+
+IFS=$'\n'
+args=($@)
+for ((i=0; i < ${#args[@]}; i++)); do
+    extract "${args[i]}"
+    echo "---------------------------------------"
+done
