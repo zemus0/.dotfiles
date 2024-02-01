@@ -14,7 +14,7 @@ format = " $name: $utilization $power ($temperature) "
 
 [[block]]
 block = "disk_space"
-path = "/home/me"
+path = "$HOME"
 info_type = "available"
 alert_unit = "GB"
 interval = 20
