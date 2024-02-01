@@ -217,7 +217,7 @@ client.background       $bg
 
 # i3status
 bar {
-    status_command i3status -c ~/.config/i3/i3status.conf | ~/.config/i3/nvidia_gpu_i3bar.py
+    status_command i3status-rs /home/me/.config/i3/i3status_rust.toml
     position top
     font pango:AurulentSansMNerdFont, Regular 8.5
     colors {
