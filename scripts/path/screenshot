@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 #https://unix.stackexchange.com/questions/233345/
 
-base_folder=/home/zem/Pictures/screenshots/$( date '+%Y-%m-%d')
+base_folder="$HOME/Pictures/screenshots/$( date '+%Y-%m-%d')"
 file_path=${base_folder}/$(date '+%H-%M-%S')_screenshot.png
 params=""
 
