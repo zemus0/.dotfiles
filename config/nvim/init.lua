@@ -117,8 +117,8 @@ vim.keymap.set({ "n", "v" }, "d", [["_d]])
 vim.keymap.set({ "n", "v" }, "x", [["_x]])
 
 -- Split buffers
-vim.keymap.set("n", "<leader>bv", ':vsplit<CR>', { desc = "Split the current buffer horizontally" })
-vim.keymap.set("n", "<leader>bh", ':split<CR>', { desc = "Split the current buffer vertically" })
+vim.keymap.set("n", "<leader>bh", ':vsplit<CR>', { desc = "Split the current buffer horizontally" })
+vim.keymap.set("n", "<leader>bv", ':split<CR>', { desc = "Split the current buffer vertically" })
 
 -- Balance all buffers
 vim.keymap.set("n", "<leader>b=", '<C-w>=', { desc = "Resize all buffers to be equal" })
