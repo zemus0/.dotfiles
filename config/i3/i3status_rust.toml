@@ -2,6 +2,9 @@ icons_format = "{icon}"
 
 [icons]
 icons = "awesome4"
+[icons.overrides]
+memory_mem = "\uf538" # 
+cpu = "\uf2db"
 
 [[block]]
 block = "cpu"
@@ -20,7 +23,7 @@ alert_unit = "GB"
 interval = 20
 warning = 20.0
 alert = 10.0
-format = " $icon Home: $available.eng(w:2) / $total "
+format = " $icon Home: $used.eng(w:2) / $total "
 
 [[block]]
 block = "memory"
