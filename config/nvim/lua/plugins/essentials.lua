@@ -2,7 +2,13 @@ return {
   -- NOTE: First, some plugins that don't require any configuration
 
   -- Git related plugins
-  'tpope/vim-fugitive',
+  {
+    'tpope/vim-fugitive',
+    config = function()
+      vim.keymap.set("n", "<leader>Dh", ":diffget //2", { desc = "Accept code from the left buffer" })
+      vim.keymap.set("n", "<leader>Dl", ":diffget //3", { desc = "Accept code from the right buffer" })
+    end
+  },
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
