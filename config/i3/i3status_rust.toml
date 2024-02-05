@@ -16,6 +16,16 @@ block = "nvidia_gpu"
 format = " $name: $utilization $power ($temperature) "
 
 [[block]]
+block = "memory"
+format = " $icon $mem_total_used_percents.eng(w:2) ($icon_swap $swap_used_percents.eng(w:2)) "
+format_alt = ""
+
+[[block]]
+block = "battery"
+format = " $icon  $percentage $power ($time) "
+missing_format = ""
+
+[[block]]
 block = "disk_space"
 path = "$HOME"
 info_type = "available"
@@ -26,14 +36,7 @@ alert = 10.0
 format = " $icon Home: $used.eng(w:2) / $total "
 
 [[block]]
-block = "memory"
-format = " $icon $mem_total_used_percents.eng(w:2) ($icon_swap $swap_used_percents.eng(w:2)) "
-format_alt = ""
-
-[[block]]
-block = "battery"
-format = " $icon  $percentage $power ($time) "
-missing_format = ""
+block = "sound"
 
 [[block]]
 block = "time"
