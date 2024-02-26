@@ -26,6 +26,7 @@ alias godot='godot 2> /dev/null'
 alias archive='ytarchive --no-frag-files -w --add-metadata -t -o "/archives/%(channel)s/%(upload_date)s_%(title)s"'
 alias runelite='bolt'
 # alias wal='wal --saturate 0.4 -o $HOME/.dotfiles/scripts/change_dunst_color.sh'
+alias screen-sleep='sleep 1; xset dpms force off'
 
 function ssht () {
     /usr/bin/ssh -t "$@" "tmux attach || tmux new";
