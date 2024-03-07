@@ -42,7 +42,10 @@ return {
             luasnip.lsp_expand(args.body)
           end,
         },
-        completion = { completeopt = 'menu,menuone,noinsert' },
+        preselect = 'none',
+        completion = {
+          completeopt = 'menu,menuone,noinsert,noselect',
+        },
 
         -- For an understanding of why these mappings were
         -- chosen, you will need to read `:help ins-completion`
