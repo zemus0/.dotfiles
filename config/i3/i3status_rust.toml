@@ -45,4 +45,4 @@ interval = 5
 format = " $timestamp.datetime(f:'%a %m/%d %r') "
 
 [[block]]
-block = "pacman"
+block = "packages"
