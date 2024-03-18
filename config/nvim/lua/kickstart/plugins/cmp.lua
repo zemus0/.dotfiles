@@ -34,6 +34,7 @@ return {
       -- See `:help cmp`
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
+      local compare = cmp.config.compare
       luasnip.config.setup {}
 
       cmp.setup {
@@ -44,6 +45,15 @@ return {
         },
         completion = {
           completeopt = 'menu,menuone,noinsert,noselect',
+        },
+        sorting = {
+          comparators = {
+            compare.locality,
+            compare.recently_used,
+            compare.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
+            compare.offset,
+            compare.order,
+          },
         },
 
         -- For an understanding of why these mappings were
