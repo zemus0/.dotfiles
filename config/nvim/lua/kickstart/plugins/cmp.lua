@@ -15,6 +15,9 @@ return {
           end
           return 'make install_jsregexp'
         end)(),
+        dependencies = {
+          'rafamadriz/friendly-snippets',
+        },
       },
       'saadparwaiz1/cmp_luasnip',
 
@@ -28,14 +31,13 @@ return {
       --    you can use this plugin to help you. It even has snippets
       --    for various frameworks/libraries/etc. but you will have to
       --    set up the ones that are useful for you.
-      'rafamadriz/friendly-snippets',
     },
     config = function()
       -- See `:help cmp`
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
-      local compare = cmp.config.compare
       luasnip.config.setup {}
+      require('luasnip.loaders.from_vscode').lazy_load()
 
       cmp.setup {
         snippet = {
@@ -49,11 +51,28 @@ return {
         },
         sorting = {
           comparators = {
-            compare.locality,
-            compare.recently_used,
-            compare.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
-            compare.offset,
-            compare.order,
+            cmp.config.compare.offset,
+            cmp.config.compare.exact,
+            cmp.config.compare.score,
+
+            -- copied from cmp-under, but I don't think I need the plugin for this.
+            -- I might add some more of my own.
+            function(entry1, entry2)
+              local _, entry1_under = entry1.completion_item.label:find '^_+'
+              local _, entry2_under = entry2.completion_item.label:find '^_+'
+              entry1_under = entry1_under or 0
+              entry2_under = entry2_under or 0
+              if entry1_under > entry2_under then
+                return false
+              elseif entry1_under < entry2_under then
+                return true
+              end
+            end,
+
+            cmp.config.compare.kind,
+            cmp.config.compare.sort_text,
+            cmp.config.compare.length,
+            cmp.config.compare.order,
           },
         },
 
