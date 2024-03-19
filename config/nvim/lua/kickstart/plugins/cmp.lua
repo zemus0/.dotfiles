@@ -43,6 +43,7 @@ return {
             luasnip.lsp_expand(args.body)
           end,
         },
+        preselect = 'none',
         completion = {
           completeopt = 'menu,menuone,noinsert,noselect',
         },
