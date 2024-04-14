@@ -1,5 +1,7 @@
 icons_format = "{icon}"
 
+[theme]
+theme = "semi-native"
 [icons]
 icons = "awesome4"
 [icons.overrides]
