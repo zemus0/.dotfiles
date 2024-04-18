@@ -62,5 +62,5 @@ if ! [ "$cmd" == "" ]; then
     # Workaround to run functions...
     echo "$cmdexec" | compgen -F "$cmdexec" | bash -i
     # ...and aliases
-    echo "($cmdexec &); disown" | bash -i
+    echo "($cmdexec &> /dev/null &); disown" | bash -i
 fi
