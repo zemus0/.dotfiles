@@ -1,7 +1,7 @@
 #!/bin/bash
-freq=~/.dmenu_history
+freq=~/.fzfrun_history
 aliases=~/.dotfiles/zsh/aliases.zsh
-dmenucmd="dmenu -i -nb $1 -nf $2 -sb $3 -sf $4"
+fzfcmd="fzf +s --info=inline --bind=ctrl-space:print-query,tab:replace-query"
 
 source $aliases
 
@@ -24,7 +24,7 @@ echo "$filter"
 cache_deduped=$(grep -vxF "$filter" <<< "$cache")
 
 # run the actual dmenu and let the user choose a command
-cmd="$(echo "$sorted"$'\n'"$cache_deduped" | $dmenucmd)"
+cmd="$(echo "$sorted"$'\n'"$cache_deduped" | $fzfcmd)"
 
 # To remove a file from history: 
 # Trail the selected item with ;remove
@@ -42,9 +42,7 @@ if [[ "$cmd" =~ $regex ]]; then
     sorted=$(sort <<< "$history" | uniq -c | sort -hr | colrm 1 8)
     # remove trailing whitespace and asterisks from arguments
     cmd=$(sed 's/[[:space:]*]*$//' <<< "$@")
-    dmenucmd+=' -l 17'
-    (sleep .1; xdotool key Tab) &
-    cmd="$(echo "$sorted"$'\n'"$cache" | $dmenucmd)"
+    cmd="$(echo "$sorted"$'\n'"$cache" | $fzfcmd)"
     if [[ $cmd == *";remove" ]]; then
         cmd=${cmd/;remove/}
         egrep -vx "$cmd" $freq > temp
@@ -61,18 +59,8 @@ if ! [ "$cmd" == "" ]; then
         cmdexec=${cmd/;/}
     fi
 
-    # open a command up in a terminal
-    # a second semicolon holds the xterm open
-    if [[ $cmd == *";;" ]]; then
-        cmdexec="xterm -hold -e $cmdexec"
-    elif [[ $cmd == *";" ]]; then
-        cmdexec="xterm -e $cmdexec"
-    fi
-
     # Workaround to run functions...
     echo "$cmdexec" | compgen -F "$cmdexec" | bash -i
     # ...and aliases
-    echo "$cmdexec" | bash -i
+    echo "($cmdexec &); disown" | bash -i
 fi
-
-

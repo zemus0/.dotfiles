@@ -227,8 +227,7 @@ bar {
     }
 }
 
-# PROTIP: You can also dynamically set dmenu's colors this way:
-bindsym $mod+d exec ~/.dotfiles/scripts/path/dmenu_recent_aliases "$barbg" "$bg" "$bg" "$barbg"
+bindsym $mod+d exec alacritty --class floating-term -e ~/.dotfiles/scripts/path/fzfrun_recent_aliases
 
 # custom commands
 bindsym --border button1 nop
@@ -240,15 +239,16 @@ bindsym $mod+Shift+minus move scratchpad
 # Show the first scratchpad window
 bindsym $mod+minus scratchpad show
 
+for_window [class="floating-term"] floating enable, border pixel 1
 for_window [class="looking-glass-client"] floating enable
-for_window [floating] border normal
+for_window [floating class="^(?!floating-term$)"] border normal
 for_window [tiling] border pixel 3
 
 # add gaps
 gaps inner 10
 gaps outer 10
 
-# bindsym --release Shift+Scroll_Lock exec ~/.VFIOinput/input_attach.sh
+bindsym --release Shift+Scroll_Lock exec ~/.VFIOinput/input_attach.sh
 bindsym --release Print exec ~/.dotfiles/scripts/path/screenshot -s -r
 exec --no-startup-id picom -b
 exec --no-startup-id xrandr --output HDMI-0 --mode 3440x1440 --rate 100
