@@ -1,7 +1,7 @@
 #!/bin/bash
 freq=~/.fzfrun_history
 aliases=~/.dotfiles/zsh/aliases.zsh
-fzfcmd="fzf +s --info=inline --bind=ctrl-space:print-query,tab:replace-query"
+fzfcmd="fzf --tiebreak=index --info=inline --bind=ctrl-space:print-query,tab:replace-query"
 
 source $aliases
 
