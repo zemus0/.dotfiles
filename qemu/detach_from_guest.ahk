@@ -1,1 +1,4 @@
-+ScrollLock::run, %comspec% /c plink.exe -batch -ssh zem@192.168.254.1 -P 38991 -i C:\Users\Bob\.ssh\id_rsa.ppk
++ScrollLock::
+{
+    Run(A_ComSpec " /c plink.exe -batch -ssh zem@192.168.0.111 -P 38991 -i C:\Users\Bob\Documents\vm.ppk")
+}
