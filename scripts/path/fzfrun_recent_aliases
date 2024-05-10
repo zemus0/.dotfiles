@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 freq=~/.fzfrun_history
 aliases=~/.dotfiles/zsh/aliases.zsh
 fzfcmd="fzf --tiebreak=index --info=inline --bind=ctrl-space:print-query,tab:replace-query"

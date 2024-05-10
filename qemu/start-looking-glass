@@ -1,6 +1,6 @@
-#!/bin/bash
-resolution="1680x1050"
-#resolution="1920x1080"
+#!/usr/bin/env bash
+#resolution="1680x1050"
+resolution="1920x1080"
 mic=""
 if [[ "$2" == "mic:allow" ]]; then
     mic="allow"

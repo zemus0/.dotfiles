@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 #https://unix.stackexchange.com/questions/233345/
 
 base_folder="$HOME/Pictures/screenshots/$( date '+%Y-%m-%d')"

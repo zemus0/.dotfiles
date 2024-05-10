@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 cached_command_path="$HOME/.cache/wal/apply_wallpaper.sh"
 launch_cmd=""
 input=""

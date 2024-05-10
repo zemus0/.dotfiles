@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 extract(){
     zipname=$(echo "$1" | rev | cut -f 1 -d '/' | cut -f 2- -d '.' | rev )
