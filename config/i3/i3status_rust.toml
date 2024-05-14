@@ -5,7 +5,7 @@ theme = "semi-native"
 [icons]
 icons = "awesome4"
 [icons.overrides]
-memory_mem = "\uf538" # 
+memory_mem = "\uefc5"
 cpu = "\uf2db"
 
 [[block]]
