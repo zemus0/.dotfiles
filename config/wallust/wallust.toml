@@ -99,6 +99,8 @@ alacritty = { src = 'alacritty-color', dst = '~/.cache/wallust/alacritty-color.t
 
 dunst = { src = 'dunstcolor', dst = '~/.cache/wallust/dunst-color' }
 
+zsh = { src = 'zsh-highlight', dst = '~/.cache/wallust/zsh-highlight-color.sh' }
+
 # REMINDER Variables and methods that can be used with templating:
 #  wallpaper:  The full path to the current wallpaper, colorscheme file or the name of the theme in use.
 #  backend:    Current **backend** being used.
