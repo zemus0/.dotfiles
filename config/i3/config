@@ -252,12 +252,4 @@ gaps outer 10
 
 bindsym --release Shift+Scroll_Lock exec ~/.VFIOinput/input_attach.sh
 bindsym --release Print exec ~/.dotfiles/scripts/path/screenshot -s -r
-exec --no-startup-id picom -b
-exec --no-startup-id xrandr --output HDMI-0 --mode 3440x1440 --rate 100
-exec --no-startup-id ~/.dotfiles/scripts/path/change-wallpaper.sh -R
-exec --no-startup-id electron-mail
-
-# don't need to remap with this keyboard (it have hardware key assignment)
-# exec --no-startup-id xkbset exp "=mousekeys"
-# exec --no-startup-id xkbset m
-# exec --no-startup-id xmodmap ~/.Xmodmap
+exec --no-startup-id ~/.dotfiles/startup.sh
