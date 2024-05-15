@@ -10,7 +10,7 @@ args=($@)
 for ((i=0; i <= ${#args[@]}; i++)); do
     case ${args[i]} in
         "-R")
-            wal -R -n
+            xrdb ~/.cache/wallust/colors.Xresources
             test -f $cached_command_path && exec $cached_command_path &
             exit
         ;;
@@ -54,12 +54,11 @@ if ffprobe "$input" -hide_banner -loglevel panic -select_streams v:0 -show_entri
     is_vidya=true
 fi
 
-wal --backend wal --cols16 --saturate 0.4 -i $wallpaper_png -n
+wallust run $wallpaper_png
 
-# using /mmhobi7/xwinwrap/
 if [ "$is_vidya" = true ] ; then
     video_resolution=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "$input")
-    launch_cmd="xwinwrap -ov -ni -nf -st -sp -b -un -g $video_resolution+$xoffset-$yoffset -- mpv -wid WID \"$input\" --no-config --no-osc --no-osd-bar --no-audio --loop-file --hwdec=auto-safe --panscan=1.0 --no-input-default-bindings"
+    launch_cmd="xwinwrap -ov -ni -nf -st -sp -b -g $video_resolution+$xoffset-$yoffset -- mpv -wid WID \"$input\" --no-config --no-osc --no-osd-bar --no-audio --loop-file --hwdec=auto-safe --panscan=1.0 --no-input-default-bindings"
 else
     launch_cmd="feh --no-fehbg --bg-fill -g +$xoffset-$yoffset \"$input\""
 fi
@@ -74,43 +73,6 @@ chmod +x "$cached_command_path"
 exec $cached_command_path &
 
 cp -- $wallpaper_png /usr/share/wallpapers/wal
-pywalfox update
-pywal-discord -t custom
-
-# CHANGE DUNST
-#        -lf/nf/cf color
-#            Defines the foreground color for low, normal and critical notifications respectively.
-# 
-#        -lb/nb/cb color
-#            Defines the background color for low, normal and critical notifications respectively.
-# 
-#        -lfr/nfr/cfr color
-#            Defines the frame color for low, normal and critical notifications respectively.
-
-[ -f "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
-
-lf=$color0
-lb=$color7
-lfr=$color4
-nf=$color0
-nb=$color3
-nfr=$color12
-# cf=$color7
-# cb=$color4
-# cfr=$color4
-
 
 pidof dunst && killall dunst
-
-sed -i "/\[urgency_low\]/,/^\[/ s/background =.*/background = \"$lb\"/" "$HOME/.dotfiles/config/dunst/dunstrc"
-sed -i "/\[urgency_low\]/,/^\[/ s/foreground =.*/foreground = \"$lf\"/" "$HOME/.dotfiles/config/dunst/dunstrc"
-sed -i "/\[urgency_low\]/,/^\[/ s/frame_color =.*/frame_color = \"$lfr\"/" "$HOME/.dotfiles/config/dunst/dunstrc"
-
-sed -i "/\[urgency_normal\]/,/^\[/ s/background =.*/background = \"$nb\"/" "$HOME/.dotfiles/config/dunst/dunstrc"
-sed -i "/\[urgency_normal\]/,/^\[/ s/foreground =.*/foreground = \"$nf\"/" "$HOME/.dotfiles/config/dunst/dunstrc"
-sed -i "/\[urgency_normal\]/,/^\[/ s/frame_color =.*/frame_color = \"$nfr\"/" "$HOME/.dotfiles/config/dunst/dunstrc"
-
-# sed -i "/\[urgency_critical\]/,/^\[/ s/background =.*/background = \"$cb\"/" "$HOME/.dotfiles/config/dunstrc"
-# sed -i "/\[urgency_critical\]/,/^\[/ s/foreground =.*/foreground = \"$cf\"/" "$HOME/.dotfiles/config/dunstrc"
-
-dunst &
+cat ~/.dotfiles/config/dunst/dunstrc ~/.cache/wallust/dunst-color | dunst -conf - &
