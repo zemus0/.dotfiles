@@ -244,6 +244,8 @@ for_window [class="looking-glass-client"] floating enable
 for_window [floating class="^(?!floating-term$)"] border normal
 for_window [tiling] border pixel 3
 
+no_focus [class="discord"]
+focus_on_window_activation none
 # add gaps
 gaps inner 10
 gaps outer 10
