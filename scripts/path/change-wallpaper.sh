@@ -11,6 +11,7 @@ for ((i=0; i <= ${#args[@]}; i++)); do
     case ${args[i]} in
         "-R")
             xrdb ~/.cache/wallust/colors.Xresources
+            i3-msg reload
             test -f $cached_command_path && exec $cached_command_path &
             exit
         ;;
