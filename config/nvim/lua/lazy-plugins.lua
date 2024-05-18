@@ -47,6 +47,8 @@ require('lazy').setup {
   require 'custom.plugins.autosession',
 
   require 'custom.plugins.markdown-preview',
+
+  require 'custom.plugins.oil',
 }
 
 -- vim: ts=2 sts=2 sw=2 et
