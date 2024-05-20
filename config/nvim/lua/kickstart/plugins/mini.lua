@@ -25,11 +25,6 @@ return {
       -- - dgc : delete comment text object
       require('mini.comment').setup()
 
-      -- Extend f, F, t, T to work on multiple lines.
-      -- Repeat jump by pressing f, F, t, T again. It is reset when cursor moved as a result of not jumping or timeout after idle time (duration customizable).
-      -- Normal, Visual, and Operator-pending (with full dot-repeat) modes are supported.
-      require('mini.jump').setup()
-
       -- auto pair brackets, and quotes, also auto remove when backspace
       require('mini.pairs').setup()
 
