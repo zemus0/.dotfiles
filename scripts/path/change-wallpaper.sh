@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-cached_command_path="$HOME/.cache/wal/apply_wallpaper.sh"
+cached_command_folder="$HOME/.cache/wallust"
+cached_command_path="$cached_command_folder/apply_wallpaper.sh"
 launch_cmd=""
 input=""
 wallpaper_png=""
@@ -81,11 +82,14 @@ else
     launch_cmd="feh --no-fehbg --bg-fill -g +$xoffset-$yoffset \"$input\""
 fi
 
+[ -d "$cached_command_folder" ] || mkdir "$cached_command_folder"
+
 if test -f "$cached_command_path"; then
     cmd="$(cat "$cached_command_path" | tr -d '"')"
     id=$(pgrep -a xwinwrap | grep "$cmd" | cut -d' ' -f1)
     [ ! -z "$id" ] && kill $id && sleep 1
 fi
+
 echo "$launch_cmd" > "$cached_command_path"
 chmod +x "$cached_command_path"
 exec $cached_command_path &
