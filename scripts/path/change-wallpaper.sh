@@ -6,6 +6,21 @@ wallpaper_png=""
 xoffset="0"
 yoffset="0"
 
+function checkcmd {
+    declare -n failstatus=$2
+    if ! command -v "$1" >/dev/null 2>&1; then
+        echo "$1 is not installed" >&2
+        failstatus=1
+    fi
+}
+
+checkcmd xwinwrap failed
+checkcmd ffmpeg failed
+checkcmd wallust failed
+checkcmd feh failed
+
+[ -z $failed ] || exit
+
 args=($@)
 for ((i=0; i <= ${#args[@]}; i++)); do
     case ${args[i]} in
