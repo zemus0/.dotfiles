@@ -1,13 +1,13 @@
 [urgency_low]
-    background = '{color7}'
-    foreground = '{color0}'
-    frame_color = '{color4}'
+    background = "{{color7}}"
+    foreground = "{{color0}}"
+    frame_color = "{{color4}}"
     timeout = 10
 
 [urgency_normal]
-    background = '{color3}'
-    foreground = '{color0}'
-    frame_color = '{color12}'
+    background = "{{color3}}"
+    foreground = "{{color0}}"
+    frame_color = "{{color12}}"
     timeout = 10
 
 [urgency_critical]
