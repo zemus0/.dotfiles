@@ -1,5 +1,17 @@
+function CreateFileIfDoesntExist () {
+    local file="$1"
+
+    if [[ -h "$file" || -e "$file" ]]
+    then
+        printf '%s' "$file"
+        return
+    fi
+
+    CreateFile "$@"
+}
+
 function IgnorePathsExcept() {
-    # Ignore all path in given directory (first parameter) 
+    # Ignore all path in given directory (first parameter)
     # that do not math the given white list (second parameter)
 
     local search_dir=$1
@@ -16,10 +28,10 @@ function IgnorePathsExcept() {
             base="$(dirname "$base")"
         done
     done
-    # Find everything except given whitelist and the directory 
+    # Find everything except given whitelist and the directory
     # searched from.
     find "$search_dir" -not \( "${find_args[@]}" -path "$search_dir" \) -prune | \
-    while read file; do 
+        while read file; do
         if [[ -d "$file" ]]; then
             IgnorePath "$file/*"
         else
@@ -54,88 +66,88 @@ function IgnorePathsExcept() {
 # from a package. In this case the package name MUST be skipped. Otherwise it is
 # REQUIRED.
 function SystemdEnable() {
-	local type=system
-	local do_alias=1 do_wanted_by=1 from_file=0
+    local type=system
+    local do_alias=1 do_wanted_by=1 from_file=0
 
-	# Parse arguments
-	while [[ $# -gt 0 ]]; do
-		case "$1" in
-			--no-alias) do_alias=0 ;;
-			--no-wanted-by) do_wanted_by=0 ;;
-			--from-file) from_file=1 ;;
-			--name)
-				local name_override=$2
-				shift 1
-				;;
-			--type)
-				type=$2
-				shift 1
-				;;
-			*)
-				break
-				;;
-		esac
-		shift 1
-	done
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --no-alias) do_alias=0 ;;
+            --no-wanted-by) do_wanted_by=0 ;;
+            --from-file) from_file=1 ;;
+            --name)
+                local name_override=$2
+                shift 1
+                ;;
+            --type)
+                type=$2
+                shift 1
+                ;;
+            *)
+                break
+                ;;
+        esac
+        shift 1
+    done
 
-	if [[ $from_file -eq 0 ]]; then
-		[[ $# -ne 2 ]] && FatalError "Expected 2 arguments, got $#."
-		local pkg="$1"
-		local unit="$2"
-	else
-		[[ $# -ne 1 ]] && FatalError "Expected 1 argument, got $#."
-		local unit="$1"
-	fi
+    if [[ $from_file -eq 0 ]]; then
+        [[ $# -ne 2 ]] && FatalError "Expected 2 arguments, got $#."
+        local pkg="$1"
+        local unit="$2"
+    else
+        [[ $# -ne 1 ]] && FatalError "Expected 1 argument, got $#."
+        local unit="$1"
+    fi
 
-	if [[ "$type" != "system" && "$type" != "user" ]]; then
-		FatalError "Unkown type ${type}"
-	fi
+    if [[ "$type" != "system" && "$type" != "user" ]]; then
+        FatalError "Unkown type ${type}"
+    fi
 
-	local filename="${unit##*/}"
+    local filename="${unit##*/}"
 
-	# Find the unit, either from package data or already added to the output
-	# directory
-	if [[ $from_file -eq 0 ]]; then
-		local unit_source="$tmp_dir/systemd_helpers/$pkg/$filename"
+    # Find the unit, either from package data or already added to the output
+    # directory
+    if [[ $from_file -eq 0 ]]; then
+        local unit_source="$tmp_dir/systemd_helpers/$pkg/$filename"
 
-		if [[ ! -f "$unit_source" ]]; then
-			mkdir -p "$tmp_dir/systemd_helpers/$pkg"
-			AconfGetPackageOriginalFile "$pkg" "$unit" > "$unit_source"
-		fi
-	else
-		local unit_source="$output_dir/files/$unit"
-	fi
+        if [[ ! -f "$unit_source" ]]; then
+            mkdir -p "$tmp_dir/systemd_helpers/$pkg"
+            AconfGetPackageOriginalFile "$pkg" "$unit" > "$unit_source"
+        fi
+    else
+        local unit_source="$output_dir/files/$unit"
+    fi
 
-	[[ ! -f "$unit_source" ]] && FatalError "$unit_source not found"
+    [[ ! -f "$unit_source" ]] && FatalError "$unit_source not found"
 
-	local target
-	local oIFS="$IFS"
-	# Process WantedBy lines (if enabled)
-	if [[ $do_wanted_by -eq 1 ]]; then
-		local name="${name_override:-${filename}}"
-		local -a wantedby
+    local target
+    local oIFS="$IFS"
+    # Process WantedBy lines (if enabled)
+    if [[ $do_wanted_by -eq 1 ]]; then
+        local name="${name_override:-${filename}}"
+        local -a wantedby
 
-		if grep -q WantedBy= "$unit_source"; then
-			IFS=$' \n\t'
-			wantedby=( $(grep -E '^WantedBy=' "$unit_source" | cut -d= -f2) )
-			IFS="$oIFS"
-			for target in "${wantedby[@]}"; do
-				CreateLink "/etc/systemd/${type}/${target}.wants/${name}" "${unit}"
-			done
-		fi
-	fi
+        if grep -q WantedBy= "$unit_source"; then
+            IFS=$' \n\t'
+            wantedby=( $(grep -E '^WantedBy=' "$unit_source" | cut -d= -f2) )
+            IFS="$oIFS"
+            for target in "${wantedby[@]}"; do
+                CreateLink "/etc/systemd/${type}/${target}.wants/${name}" "${unit}"
+            done
+        fi
+    fi
 
-	# Process Alias lines (if enabled)
-	if [[ $do_alias -eq 1 ]]; then
-		local -a aliases
+    # Process Alias lines (if enabled)
+    if [[ $do_alias -eq 1 ]]; then
+        local -a aliases
 
-		if grep -q Alias= "$unit_source"; then
-			IFS=$' \n\t'
-			aliases=( $(grep -E '^Alias=' "$unit_source" | cut -d= -f2) )
-			IFS="$oIFS"
-			for target in "${aliases[@]}"; do
-				CreateLink "/etc/systemd/${type}/${target}" "${unit}"
-			done
-		fi
-	fi
+        if grep -q Alias= "$unit_source"; then
+            IFS=$' \n\t'
+            aliases=( $(grep -E '^Alias=' "$unit_source" | cut -d= -f2) )
+            IFS="$oIFS"
+            for target in "${aliases[@]}"; do
+                CreateLink "/etc/systemd/${type}/${target}" "${unit}"
+            done
+        fi
+    fi
 }

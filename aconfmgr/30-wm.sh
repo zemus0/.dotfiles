@@ -13,9 +13,8 @@ AddPackage lightdm # A lightweight display manager
 AddPackage lightdm-slick-greeter # A slick-looking LightDM greeter
 CopyFile /etc/lightdm/lightdm.conf
 CopyFile /etc/lightdm/slick-greeter.conf
-CreateFile /usr/share/wallpapers/wal 777
+CreateFileIfDoesntExist /usr/share/wallpapers/wal 666
 SetFileProperty /usr/share/wallpapers mode 555
-SetFileProperty /usr/share/wallpapers/wal mode 666
 IgnorePath '/usr/share/wallpapers'
 SystemdEnable lightdm /usr/lib/systemd/system/lightdm.service
 
