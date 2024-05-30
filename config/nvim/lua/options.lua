@@ -16,6 +16,11 @@ vim.opt.showmode = false
 -- Enable break indent
 vim.opt.breakindent = true
 
+-- Enable space indent
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+
 -- Save undo history
 vim.opt.undofile = true
 vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
