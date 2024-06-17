@@ -10,4 +10,5 @@ AddPackage man-db # A utility for reading man pages
 AddPackage man-pages # Linux man pages
 AddPackage texinfo # GNU documentation system for on-line information and printed output
 AddPackage firefox # Standalone web browser from mozilla.org
+AddPackage --foreign ungoogled-chromium-bin # A lightweight approach to removing Google web service dependency
 AddPackage brightnessctl # Lightweight brightness control tool

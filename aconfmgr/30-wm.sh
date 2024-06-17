@@ -5,6 +5,7 @@ AddPackage zsh-syntax-highlighting # Fish shell like syntax highlighting for Zsh
 
 # Wm
 AddPackage xorg-server # Xorg X server
+AddPackage xorg-xrandr # Primitive command line interface to RandR extension
 AddPackage i3-wm # Improved dynamic tiling window manager
 AddPackage i3status-rust # Resourcefriendly and feature-rich replacement for i3status, written in pure Rust
 AddPackage fakeroot # Tool for simulating superuser privileges
@@ -30,8 +31,10 @@ AddPackage pipewire # Low-latency audio/video router and processor
 AddPackage pipewire-alsa # Low-latency audio/video router and processor - ALSA configuration
 AddPackage pipewire-pulse # Low-latency audio/video router and processor - PulseAudio replacement
 AddPackage wireplumber # Session / policy manager implementation for PipeWire
+AddPackage pavucontrol # PulseAudio Volume Control
 
 # Fonts
 AddPackage ttf-anonymouspro-nerd # Patched font Anonymous Pro (Anonymice) from nerd fonts library
 AddPackage otf-aurulent-nerd # Patched font Aurulent Sans Mono from nerd fonts library
 AddPackage noto-fonts-cjk # Google Noto CJK fonts
+AddPackage noto-fonts-emoji # Google Noto emoji fonts
