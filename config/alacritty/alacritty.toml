@@ -4,4 +4,4 @@ import = [ '~/.cache/wallust/alacritty-color.toml' ]
 TERM = "xterm-256color"
 
 [font]
-size = 10
+size = 8
