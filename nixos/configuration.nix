@@ -30,6 +30,17 @@
   powerManagement.enable = true;
   # enable powersaving stuff
   services.tlp.enable = true;
+  # enable earlyoom
+  services.earlyoom = { 
+    enable = true;
+    extraArgs = [
+      "-m 10",
+      "-r 3600",
+      "-n",
+      "--avoid '(^|/)(init|systemd|Xorg|sshd|qemu-system-x86_64)$'"
+    ]
+  };
+
 
   networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
