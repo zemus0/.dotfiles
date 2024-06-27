@@ -41,7 +41,3 @@ block = "sound"
 block = "time"
 interval = 5
 format = " $timestamp.datetime(f:'%a %m/%d %r') "
-
-[[block]]
-block = "packages"
-package_manager=["pacman"]
