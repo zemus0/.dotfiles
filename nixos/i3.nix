@@ -21,7 +21,8 @@
                     ffmpeg
                     mpv
                     feh
-		    dunst
+                    dunst
+                    brightnessctl
                 ];
             };
         };
