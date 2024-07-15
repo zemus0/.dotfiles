@@ -11,6 +11,7 @@
       git
       vesktop
       keepassxc
+      tmux
     ];
   };
 }
