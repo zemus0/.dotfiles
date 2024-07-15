@@ -34,11 +34,11 @@
   services.earlyoom = { 
     enable = true;
     extraArgs = [
-      "-m 10",
-      "-r 3600",
-      "-n",
+      "-m 10"
+      "-r 3600"
+      "-n"
       "--avoid '(^|/)(init|systemd|Xorg|sshd|qemu-system-x86_64)$'"
-    ]
+    ];
   };
 
 
