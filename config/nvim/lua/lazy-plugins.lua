@@ -51,6 +51,8 @@ require('lazy').setup {
   require 'custom.plugins.oil',
 
   require 'custom.plugins.hop',
+
+  require 'custom.plugins.vimtex',
 }
 
 -- vim: ts=2 sts=2 sw=2 et

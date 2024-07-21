@@ -12,6 +12,8 @@ return {
         auto_install = true,
         highlight = { enable = true },
         indent = { enable = true },
+        ignore_install = { 'latex' },
+        disable = { 'latex' },
       }
 
       -- There are additional nvim-treesitter modules that you can use to interact
