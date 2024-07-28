@@ -12,6 +12,7 @@
       vesktop
       keepassxc
       tmux
+      gnumake
     ];
   };
 }
