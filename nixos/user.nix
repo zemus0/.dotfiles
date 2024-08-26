@@ -12,7 +12,9 @@
       vesktop
       keepassxc
       tmux
-      gnumake
+      imagemagick
+      moreutils
+      ungoogled-chromium
     ];
   };
 }

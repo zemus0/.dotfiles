@@ -15,5 +15,7 @@
         nodejs
 
         unzip
+
+        xdragon
     ];
 }
