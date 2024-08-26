@@ -74,6 +74,26 @@
   # Configure keymap in X11
   services.xserver.xkb.layout = "us";
   #services.xserver.xkb.options = "eurosign:e,caps:escape";
+  # Keymapping keys
+  services.keyd = {
+    enable = true;
+    keyboards = {
+      default = {
+        ids = ["*"];
+        settings = {
+          main = {
+            capslock = "middlemouse";
+          };
+        };
+        extraConfig = ''
+        [control]
+        capslock = leftmouse
+        [alt]
+        capslock = rightmouse
+        '';
+      };
+    };
+  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -100,6 +120,8 @@
   environment.systemPackages = with pkgs; [
     neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
+    gnumake
+    htop
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
