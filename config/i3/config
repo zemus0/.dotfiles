@@ -227,7 +227,7 @@ bar {
     }
 }
 
-bindsym $mod+d exec alacritty --class floating-term -e ~/.dotfiles/scripts/path/fzfrun_recent_aliases
+bindsym $mod+d exec ~/.dotfiles/scripts/path/dmenu_recent_aliases "$barbg" "$bg" "$bg" "$barbg"
 
 # custom commands
 bindsym --border button1 nop
