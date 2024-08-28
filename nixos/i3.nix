@@ -12,7 +12,7 @@
             windowManager.i3 = {
                 enable = true;
                 extraPackages = with pkgs; [ 
-                    fzf
+                    dmenu
                     alacritty
                     i3status-rust
                     picom

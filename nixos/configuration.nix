@@ -122,6 +122,7 @@
     wget
     gnumake
     htop
+    p7zip
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
