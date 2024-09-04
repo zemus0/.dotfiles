@@ -8,11 +8,8 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./i3.nix
-      ./nvim.nix
-      ./user.nix
-      ./firefox.nix
       ./encryption.nix
+      ./i3.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -99,30 +96,39 @@
   services.printing.enable = true;
 
   # Enable sound.
-  sound.enable = true;
+  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
-    audio.enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
   };
-  # hardware.pulseaudio.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.mutableUsers = true;
+  # users.mutableUsers = true;
+  users.users.me = {
+    initialPassword = "1234";
+    isNormalUser = true;
+    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    shell = pkgs.zsh;
+    ignoreShellProgramCheck = true;
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    pciutils
+    pwvucontrol
+    git
+    neovim 
     wget
     gnumake
-    htop
-    p7zip
+    moreutils
+    glibc
+    glibcInfo
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

@@ -5,9 +5,9 @@ get_alias() {
   printf '%s\n' $aliases[$1]
 }
 
-# zsh highlight
-typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=$color12,bold'
+# # zsh highlight
+# typeset -A ZSH_HIGHLIGHT_STYLES
+# ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=$color12,bold'
 
 source $HOME/.dotfiles/zsh/aliases.zsh
 export PATH=$PATH:$HOME/.dotfiles/scripts/path/
