@@ -3,5 +3,6 @@
 
 picom -b
 ~/.dotfiles/scripts/path/change-wallpaper.sh -R
+xinput set-prop 11 323 0
 # xrandr --output HDMI-0 --mode 3440x1440 --rate 100
 # electron-mail
