@@ -18,12 +18,12 @@ in
 		antidote = {
 			enable = true;
 			plugins = [
-				# "zsh-users/zsh-autosuggestions"
 				"romkatv/powerlevel10k"
 				"joshskidmore/zsh-fzf-history-search"
 				"Aloxaf/fzf-tab"
 			];
 		};
+		initExtraBeforeCompInit = "zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'";
 		initExtra = lib.strings.concatStrings[
 			zshrc
 			"\nsource ~/.dotfiles/zsh/p10k.zsh"
