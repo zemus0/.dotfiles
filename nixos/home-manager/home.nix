@@ -30,6 +30,7 @@
       imagemagick
       ungoogled-chromium
       direnv
+      nix-search-cli
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
