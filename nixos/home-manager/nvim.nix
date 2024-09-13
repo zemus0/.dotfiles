@@ -6,7 +6,6 @@
         fzf
         ripgrep
 
-        lua-language-server
         texlive.combined.scheme-full
         zathura
 
