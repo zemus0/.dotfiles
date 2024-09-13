@@ -22,6 +22,8 @@ format_alt = ""
 block = "battery"
 format = " $icon  $percentage $power ($time) "
 empty_format = " $icon  $percentage $power ($time) "
+full_format = " $icon  full "
+full_threshold = 69
 missing_format = ""
 
 [[block]]
