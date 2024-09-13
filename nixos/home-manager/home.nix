@@ -2,6 +2,7 @@
   imports = [
     ./zsh.nix
     ./nvim.nix
+    ./firefox.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -19,6 +20,8 @@
   home.stateVersion = "24.05"; # Please read the comment before changing.
 
   home.packages = with pkgs;[
+      yt-dlp
+      mediainfo
       htop
       p7zip
       fastfetch

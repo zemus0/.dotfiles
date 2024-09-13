@@ -52,7 +52,7 @@
         };
         in listToAttrs [
             (extension "ublock-origin" "uBlock0@raymondhill.net")
-            (extension "Vimium" "{d7742d87-e61d-4b78-b8a1-b469842139fa}")
+            (extension "vimium-ff" "{d7742d87-e61d-4b78-b8a1-b469842139fa}")
         ];
   
         /* ---- PREFERENCES ---- */
