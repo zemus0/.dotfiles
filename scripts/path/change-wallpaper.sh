@@ -81,12 +81,13 @@ if ffprobe "$input" -hide_banner -loglevel panic -select_streams v:0 -show_entri
 fi
 
 wallust run $wallpaper_png
-xrdb ~/.cache/wallust/colors.Xresources
 
 if [ $? != 0 ]; then
-    echo "wallust run command failed, exiting..." 2
+    echo "wallust run command failed, exiting..." >&2
     exit
 fi
+
+xrdb ~/.cache/wallust/colors.Xresources
 
 if [ "$is_vidya" = true ] ; then
     video_resolution=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "$input")
