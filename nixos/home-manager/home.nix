@@ -20,18 +20,27 @@
   home.stateVersion = "24.05"; # Please read the comment before changing.
 
   home.packages = with pkgs;[
+      # development
       tmux
+      direnv
+
+      # media
       yt-dlp
       mediainfo
+      imagemagick
+      zathura
+
+      # internet
+      ungoogled-chromium
+      vesktop
+      nix-search-cli
+      
+      # general
+      fastfetch
       htop
       p7zip
-      fastfetch
-      vesktop
       keepassxc
-      imagemagick
-      ungoogled-chromium
-      direnv
-      nix-search-cli
+      xdragon
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
