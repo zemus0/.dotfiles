@@ -3,7 +3,7 @@
 # sudo cp $HOME/.dotfiles/qemu/qemu.hooks /etc/libvirt/hooks/qemu
 commands=$2
 currentVm=$1
-vmNames=("GamingVM AIVm")
+vmNames=("GamingVM workVm")
 
 if [[ " ${vmNames[*]} " =~ " ${currentVm} " ]]; then
     if [ "$commands" = "started" ]; then

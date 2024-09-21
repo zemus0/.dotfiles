@@ -10,3 +10,4 @@ picom -b
 xrandr --output HDMI-0 --mode 3440x1440 --rate 100
 ~/.dotfiles/scripts/path/change-wallpaper.sh -R
 electron-mail
+dunst

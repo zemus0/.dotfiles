@@ -241,6 +241,7 @@ bindsym $mod+minus scratchpad show
 
 for_window [class="floating-term"] floating enable, border pixel 1
 for_window [class="looking-glass-client"] floating enable
+for_window [class="RuneLite"] floating enable
 for_window [floating class="^(?!floating-term$)"] border normal
 for_window [tiling] border pixel 3
 
