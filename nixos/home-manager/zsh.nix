@@ -19,19 +19,22 @@ in
 				ignoreDups = true;
 				expireDuplicatesFirst = true;
 			};
-			historySubstringSearch.enable = true;
+
 			syntaxHighlighting.enable = true;
-			antidote = {
+			oh-my-zsh = {
 				enable = true;
 				plugins = [
-					"romkatv/powerlevel10k"
-					"jeffreytse/zsh-vi-mode"
-					"oz/safe-paste"
+					"branch"
+					"vi-mode"
+					"safe-paste"
+					"zsh-interactive-cd"
 				];
+				theme = "robbyrussell";
 			};
+
 			initExtra = lib.strings.concatStrings[
 				zshrc
-				"\nsource ~/.dotfiles/zsh/p10k.zsh"
+				# "\nsource ~/.dotfiles/zsh/p10k.zsh"
 			];
 		};
 	};
