@@ -5,9 +5,9 @@ get_alias() {
   printf '%s\n' $aliases[$1]
 }
 
-# # zsh highlight
-# typeset -A ZSH_HIGHLIGHT_STYLES
-# ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=$color12,bold'
+zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==02=01}:${(s.:.)LS_COLORS}")'
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' menu select
 
 source $HOME/.dotfiles/zsh/aliases.zsh
 export PATH=$PATH:$HOME/.dotfiles/scripts/path/
