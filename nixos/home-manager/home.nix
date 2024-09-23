@@ -22,7 +22,6 @@
   home.packages = with pkgs;[
       # development
       tmux
-      direnv
 
       # media
       yt-dlp
