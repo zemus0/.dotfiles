@@ -34,12 +34,8 @@ in
 				"\nsource ~/.dotfiles/zsh/p10k.zsh"
 			];
 		};
-		initExtraBeforeCompInit = "zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'";
-		initExtra = lib.strings.concatStrings[
-			zshrc
-			"\nsource ~/.dotfiles/zsh/p10k.zsh"
-		];
 	};
+
 	home.packages = with pkgs;[
 		fzf
 	];
