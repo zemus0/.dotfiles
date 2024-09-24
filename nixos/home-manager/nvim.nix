@@ -1,15 +1,15 @@
 {config, pkgs, ...}: {
-    home.packages = with pkgs; [
-        neovim
-        xclip
+	home.packages = with pkgs; [
+		neovim
+		xclip
 
-        fzf
-        ripgrep
+		fzf
+		ripgrep
 
-        lua-language-server
+		lua-language-server
 
-        gcc
-        python3
-        nodejs
-    ];
+		gcc
+		python3
+		nodejs
+	];
 }
