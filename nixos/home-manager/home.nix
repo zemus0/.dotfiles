@@ -22,6 +22,8 @@
 	home.packages = with pkgs;[
 		# development
 		tmux
+		man-pages
+		man-pages-posix
 
 		# media
 		yt-dlp
