@@ -43,7 +43,6 @@ if [[ "$cmd" =~ $regex ]]; then
     # remove trailing whitespace and asterisks from arguments
     cmd=$(sed 's/[[:space:]*]*$//' <<< "$@")
     dmenucmd+=' -l 17'
-    (sleep .1; xdotool key Tab) &
     cmd="$(echo "$sorted"$'\n'"$cache" | $dmenucmd)"
     if [[ $cmd == *";remove" ]]; then
         cmd=${cmd/;remove/}
