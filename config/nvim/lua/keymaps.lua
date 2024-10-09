@@ -30,6 +30,7 @@ vim.keymap.set({ 'i', 'v', 'n' }, '<C-s>', '<cmd>:w %<CR>')
 -- Don't replace buffer when delete
 vim.keymap.set({ 'n', 'v' }, 'd', [["_d]])
 vim.keymap.set({ 'n', 'v' }, 'x', [["_x]])
+vim.keymap.set({ 'n', 'v' }, 'c', [["_c]])
 
 -- Do replace buffer
 vim.keymap.set({ 'n', 'v' }, '<leader>d', 'd')
@@ -50,9 +51,12 @@ vim.keymap.set('v', '<Tab>', '>gv')
 vim.keymap.set('v', '<S-Tab>', '<gv')
 
 -- Search and replace word under cursor
-vim.keymap.set('n', '<leader>sr', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Search and replace word under cursor' })
-vim.keymap.set('x', '<leader>sr', [[<Esc>:'<,'>s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Search and replace in selected range' })
-vim.keymap.set('x', '<leader>sw', [["ay:%s/\<<C-r>a\>/<C-r>a/gI<Left><Left><Left>]], { desc = 'Search and replace selected word' })
+vim.keymap.set('n', '<leader>sr', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+  { desc = 'Search and replace word under cursor' })
+vim.keymap.set('x', '<leader>sr', [[<Esc>:'<,'>s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+  { desc = 'Search and replace in selected range' })
+vim.keymap.set('x', '<leader>sw', [["ay:%s/\<<C-r>a\>/<C-r>a/gI<Left><Left><Left>]],
+  { desc = 'Search and replace selected word' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
