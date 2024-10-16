@@ -3,6 +3,7 @@
 		./zsh.nix
 		./nvim.nix
 		./firefox.nix
+		./virtmanager.nix
 	];
 
 	# Home Manager needs a bit of information about you and the paths it should
@@ -30,6 +31,7 @@
 		mediainfo
 		imagemagick
 		zathura
+		gimp
 
 		# internet
 		ungoogled-chromium
