@@ -13,6 +13,8 @@
 	nixpkgs.config.allowUnfree = true;
 	hardware.enableAllFirmware = true;
 	programs.nix-ld.enable = true;
+	programs.virt-manager.enable = true;
+	virtualisation.libvirtd.enable = true;
 
 	# Use the systemd-boot EFI boot loader.
 	# boot.loader.systemd-boot.enable = true;
@@ -114,7 +116,7 @@
 	users.users.me = {
 		initialPassword = "1234";
 		isNormalUser = true;
-		extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+		extraGroups = [ "wheel" "libvirtd" ]; # Enable ‘sudo’ for the user.
 		shell = pkgs.zsh;
 		ignoreShellProgramCheck = true;
 	};
