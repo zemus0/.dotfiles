@@ -7,6 +7,14 @@ wallpaper_png=""
 xoffset="0"
 yoffset="0"
 
+function killXwinwrap {
+    if test -f "$cached_command_path"; then
+        cmd="$(cat "$cached_command_path" | tr -d '"')"
+        id=$(pgrep -a xwinwrap | grep "$cmd" | cut -d' ' -f1)
+        [ ! -z "$id" ] && kill $id && sleep 1
+    fi
+}
+
 function checkcmd {
     declare -n failstatus=$2
     if ! command -v "$1" >/dev/null 2>&1; then
@@ -26,6 +34,7 @@ args=($@)
 for ((i=0; i <= ${#args[@]}; i++)); do
     case ${args[i]} in
         "-R")
+            killXwinwrap
             xrdb ~/.cache/wallust/colors.Xresources
             i3-msg reload
             test -f $cached_command_path && exec $cached_command_path &
@@ -81,18 +90,14 @@ fi
 
 if [ "$is_vidya" = true ] ; then
     video_resolution=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "$input")
-    launch_cmd="xwinwrap -ov -ni -nf -st -sp -b -g $video_resolution+$xoffset-$yoffset -- mpv -wid WID \"$input\" --no-config --no-osc --no-osd-bar --no-audio --loop-file --hwdec=auto-safe --panscan=1.0 --no-input-default-bindings"
+    launch_cmd="xwinwrap -ov -ni -nf -st -sp -b -g $video_resolution+$xoffset-$yoffset -- mpv -wid WID \"$input\" --quiet --no-config --no-osc --no-osd-bar --no-audio --loop-file --hwdec=auto-safe --panscan=1.0 --no-input-default-bindings"
 else
     launch_cmd="feh --no-fehbg --bg-fill -g +$xoffset-$yoffset \"$input\""
 fi
 
 [ -d "$cached_command_folder" ] || mkdir "$cached_command_folder"
 
-if test -f "$cached_command_path"; then
-    cmd="$(cat "$cached_command_path" | tr -d '"')"
-    id=$(pgrep -a xwinwrap | grep "$cmd" | cut -d' ' -f1)
-    [ ! -z "$id" ] && kill $id && sleep 1
-fi
+killXwinwrap
 
 echo "$launch_cmd" > "$cached_command_path"
 chmod +x "$cached_command_path"
