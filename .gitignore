@@ -1,3 +1,4 @@
 config/tmux/plugins
 lazy-lock.json
 config/gtk-3.0
+config/direnv/lib
