@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
-#resolution="1680x1050"
-resolution="1920x1080"
-mic=""
-if [[ "$2" == "mic:allow" ]]; then
-    mic="allow"
-elif [[ "$2" == "mic:deny" ]]; then
-    mic="deny"
-else
-    mic="prompt"
-fi
+width="1920"
+height="1080"
 
-if [[ "$1" == "-s" ]]; then
-    looking-glass-client spice:audio=yes audio:micDefault=$mic -s win:size=$resolution
-else
-    looking-glass-client input:rawMouse=true audio:micDefault=$mic win:size=$resolution
-fi
+args=($@)
+for ((i=0; i <= ${#args[@]}; i++)); do
+    case ${args[i]} in
+        "-w")
+            width="${args[i+1]}"
+        ;;
+        "-h")
+            height="${args[i+1]}"
+        ;;
+    esac
+done
+
+
+looking-glass-client spice:audio=yes input:rawMouse=true audio:micDefault=prompt win:size=$width"x"$height
