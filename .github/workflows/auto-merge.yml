@@ -32,5 +32,6 @@ jobs:
             echo "Rebasing main into $branch"
             git checkout "$branch"
             git rebase origin/main
+            git rebase origin/$branch
             git push origin "$branch"
           done
