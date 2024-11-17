@@ -40,6 +40,7 @@
 		nix-search-cli
 		
 		# general
+		xdg-user-dirs
 		fastfetch
 		htop
 		p7zip
