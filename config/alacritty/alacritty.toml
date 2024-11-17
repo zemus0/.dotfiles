@@ -1,7 +1,9 @@
-import = [ '~/.cache/wallust/alacritty-color.toml' ]
 
 [env]
 TERM = "xterm-256color"
 
 [font]
 size = 10
+
+[general]
+import = [ '~/.cache/wallust/alacritty-color.toml' ]
