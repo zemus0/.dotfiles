@@ -1,0 +1,35 @@
+name: rebase all changes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  rebase:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Fetch all branches
+        run: |
+          git fetch --all
+
+      - name: Rebase branches
+        run: |
+          branches=$(git branch -r | grep -v 'origin/main' | sed 's/origin\///')
+          for branch in $branches; do
+            echo "Rebasing main into $branch"
+            git checkout "$branch"
+            git rebase origin/main
+            git push origin "$branch"
+          done
