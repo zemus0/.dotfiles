@@ -35,6 +35,7 @@
 
 		# internet
 		ungoogled-chromium
+		librewolf
 		vesktop
 		nix-search-cli
 		
