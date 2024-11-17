@@ -1,7 +1,6 @@
 {config, pkgs, ...}: {
 	imports = [ ./sugar-candy-sddm.nix ];
 
-<<<<<<< HEAD
 	services = { 
 		displayManager.sddm = {
 			enable = true;
