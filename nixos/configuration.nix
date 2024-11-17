@@ -5,9 +5,9 @@
 { config, lib, pkgs, ... }: {
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
-		./encryption.nix
 		./i3.nix
 		./vm.nix
+		./nvidia.nix
 	];
 
 	nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -113,7 +113,7 @@
 
 	# Define a user account. Don't forget to set a password with ‘passwd’.
 	# users.mutableUsers = true;
-	users.users.me = {
+	users.users.zem = {
 		initialPassword = "1234";
 		isNormalUser = true;
 		extraGroups = [ "wheel" "libvirtd" ]; # Enable ‘sudo’ for the user.
