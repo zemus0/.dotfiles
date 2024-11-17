@@ -43,6 +43,7 @@
 		nix-search-cli
 		
 		# general
+		xdotool
 		xdg-user-dirs
 		fastfetch
 		htop
