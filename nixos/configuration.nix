@@ -7,6 +7,7 @@
 		./hardware-configuration.nix
 		./encryption.nix
 		./i3.nix
+		./vm.nix
 	];
 
 	nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -14,7 +15,6 @@
 	hardware.enableAllFirmware = true;
 	programs.nix-ld.enable = true;
 	programs.virt-manager.enable = true;
-	virtualisation.libvirtd.enable = true;
 
 	# Use the systemd-boot EFI boot loader.
 	# boot.loader.systemd-boot.enable = true;
