@@ -33,7 +33,6 @@
 		imagemagick
 		zathura
 		gimp
-		udisks
 		blender
 
 		# internet
