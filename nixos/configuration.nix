@@ -117,6 +117,7 @@
 		initialPassword = "1234";
 		isNormalUser = true;
 		extraGroups = [ "wheel" "libvirtd" ]; # Enable ‘sudo’ for the user.
+		home = "/home/zem";
 		shell = pkgs.zsh;
 		ignoreShellProgramCheck = true;
 	};
