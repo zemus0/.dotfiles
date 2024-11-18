@@ -1,22 +1,19 @@
-#!/bin/bash
+#!/bin/sh
 
 # sudo cp $HOME/.dotfiles/qemu/qemu.hooks /etc/libvirt/hooks/qemu
 commands=$2
 currentVm=$1
-vmNames=("GamingVM workVm")
+vmNames=("dev")
 
 if [[ " ${vmNames[*]} " =~ " ${currentVm} " ]]; then
     if [ "$commands" = "started" ]; then
-        # systemctl set-property --runtime -- system.slice AllowedCPUs=0,1,8,9
-        # systemctl set-property --runtime -- user.slice AllowedCPUs=0,1,8,9
-        # systemctl set-property --runtime -- init.scope AllowedCPUs=0,1,8,9
-        systemctl set-property --runtime -- system.slice AllowedCPUs=0-3,8-11
-        systemctl set-property --runtime -- user.slice AllowedCPUs=0-3,8-11
-        systemctl set-property --runtime -- init.scope AllowedCPUs=0-3,8-11
+        systemctl set-property --runtime -- system.slice AllowedCPUs=0-3
+        systemctl set-property --runtime -- user.slice AllowedCPUs=0-3
+        systemctl set-property --runtime -- init.scope AllowedCPUs=0-3
     elif [ "$commands" = "release" ]; then
-        systemctl set-property --runtime -- system.slice AllowedCPUs=0-15
-        systemctl set-property --runtime -- user.slice AllowedCPUs=0-15
-        systemctl set-property --runtime -- init.scope AllowedCPUs=0-15
+        systemctl set-property --runtime -- system.slice AllowedCPUs=0-11
+        systemctl set-property --runtime -- user.slice AllowedCPUs=0-11
+        systemctl set-property --runtime -- init.scope AllowedCPUs=0-11
     fi
 
 fi
