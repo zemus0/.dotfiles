@@ -252,4 +252,3 @@ gaps outer 10
 bindsym --release Shift+Scroll_Lock exec ~/.VFIOinput/input_attach.sh
 bindsym --release Print exec ~/.dotfiles/scripts/path/screenshot -s -r
 exec --no-startup-id ~/.dotfiles/startup.sh
-exec --no-startup-id amixer -c 1 sset 'Auto-Mute Mode' Disabled
