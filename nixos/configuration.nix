@@ -8,6 +8,7 @@
 		./encryption.nix
 		./i3.nix
 		./vm.nix
+		./wireguard.nix
 	];
 
 	nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -126,6 +127,7 @@
 	environment.systemPackages = with pkgs; [
 		alsa-utils
 		pulseaudio
+		wireguard-tools
 		psmisc
 		pciutils
 		pwvucontrol
