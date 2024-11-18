@@ -25,6 +25,7 @@
 		tmux
 		man-pages
 		man-pages-posix
+		sshfs
 
 		# media
 		yt-dlp
@@ -32,6 +33,8 @@
 		imagemagick
 		zathura
 		gimp
+		udisks
+		blender
 
 		# internet
 		ungoogled-chromium
