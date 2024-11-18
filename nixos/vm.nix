@@ -2,7 +2,7 @@
 	virtualisation.libvirtd = {
 		enable = true;
 		hooks.qemu = {
-			cpupinning = /home/me/.dotfiles/qemu/qemu.hooks;
+			cpupinning = /home/zem/.dotfiles/qemu/qemu.hooks;
 		};
 	};
 }
