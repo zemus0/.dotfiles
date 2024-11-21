@@ -25,9 +25,6 @@ return {
       -- - dgc : delete comment text object
       require('mini.comment').setup()
 
-      -- auto pair brackets, and quotes, also auto remove when backspace
-      require('mini.pairs').setup()
-
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
