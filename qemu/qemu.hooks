@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/run/current-system/sw/bin/bash
 
 # sudo cp $HOME/.dotfiles/qemu/qemu.hooks /etc/libvirt/hooks/qemu
 commands=$2
