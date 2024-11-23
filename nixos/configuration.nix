@@ -6,8 +6,8 @@
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
 		./i3.nix
-		./vm.nix
-		./nvidia.nix
+		./vfio.nix
+		./searx.nix
 	];
 
 	nix.settings.experimental-features = [ "nix-command" "flakes" ];
