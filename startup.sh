@@ -7,4 +7,4 @@ xrandr --output HDMI-0 --mode 3440x1440 --rate 100 &
 electron-mail &
 dunst &
 tmux new-session -d &
-amixer -c 2 sset 'Auto-Mute Mode' Disabled &
+amixer -c 1 sset 'Auto-Mute Mode' Disabled &
