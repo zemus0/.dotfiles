@@ -8,6 +8,7 @@
 		./encryption.nix
 		./i3.nix
 		./vm.nix
+		./searx.nix
 	];
 
 	nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -144,18 +145,6 @@
 	programs.gnupg.agent = {
 		enable = true;
 		enableSSHSupport = true;
-	};
-
-	# use searx for searching
-	services.searx = {
-		enable = true;
-		settings = {
-			server = {
-				port = 8888;
-				bind_address = "127.0.0.1";
-				# secret_key = "";
-			};
-		};
 	};
 
 	services.udisks2.enable = true;
