@@ -6,6 +6,14 @@ let
 		"10de:1adb"
 	];
 in { config, lib, pkgs, ... }: {
+	systemd.tmpfiles.rules = [
+		"f /dev/shm/looking-glass 0660 zem kvm"
+	];
+
+	environment.systemPackages = with pkgs; [
+		looking-glass-client
+	];
+
 	boot = {
 		initrd.kernelModules = [
 			"vfio_pci"
