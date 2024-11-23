@@ -1,7 +1,21 @@
 #!/usr/bin/env bash
-worked=0
 
-xdotool search --class "$GAME_NAME" set_window --class "lutris_app" && worked=1
-while [ $worked == 0 ]; do
-    xdotool search --class "$GAME_NAME" set_window --class "lutris_app" && worked=1
-done
+function run()
+{
+    worked=0
+
+    pids="$(pgrep -f "$PWD")"
+    while [ $worked == 0 ]; do
+        for pid in ${pids[@]}
+        do
+            if [ "$(ps e -ww -p $pid | grep GAME_NAME)" != '' ]; then
+                winid="`wmctrl -lp | awk -vpid=$pid '$3==pid {print $1; exit}'`"
+                [[ -z "$winid" ]] || worked=1
+            fi
+        done
+    done
+    i3-msg floating enable > /dev/null;
+}
+
+export -f run
+timeout 5s bash -c run

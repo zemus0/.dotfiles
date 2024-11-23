@@ -238,7 +238,6 @@ bindsym $mod+Shift+minus move scratchpad
 
 # Show the first scratchpad window
 bindsym $mod+minus scratchpad show
-for_window [class="lutris_app"] floating enable, border pixel 1
 for_window [class="steam_app"] floating enable, border pixel 1
 for_window [class="floating-term"] floating enable, border pixel 1
 for_window [class="looking-glass-client"] floating enable
