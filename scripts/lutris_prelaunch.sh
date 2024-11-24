@@ -6,6 +6,9 @@ function run()
 
     pids="$(pgrep -f "$PWD")"
     while [ $worked == 0 ]; do
+        if [[ -z "$pids" ]]; then
+            pids="$(xdotool search --class "$GAME_NAME" getwindowpid $@)"
+        fi
         for pid in ${pids[@]}
         do
             if [ "$(ps e -ww -p $pid | grep GAME_NAME)" != '' ]; then
