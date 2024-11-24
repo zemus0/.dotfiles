@@ -10,6 +10,24 @@ in { config, lib, pkgs, ... }: {
 		"f /dev/shm/looking-glass 0660 zem kvm"
 	];
 
+	nixpkgs.overlays = [ (final: prev: {
+		looking-glass-client = prev.looking-glass-client.overrideAttrs(
+			old: {
+				pname = "looking-glass-client";
+
+				src = pkgs.fetchFromGitHub {
+					owner = "gnif";
+					repo = "LookingGlass";
+					rev = "B6";
+					hash = "sha256-6vYbNmNJBCoU23nVculac24tHqH7F4AZVftIjL93WJU=";
+					fetchSubmodules = true;
+				};
+
+				patches = [];
+			});
+		})
+	];
+
 	environment.systemPackages = with pkgs; [
 		looking-glass-client
 	];
