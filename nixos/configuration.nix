@@ -58,7 +58,7 @@
 
 	fonts = {
 			packages = with pkgs; [
-					(nerdfonts.override {fonts = [ "AurulentSansMono" ];})
+					nerd-fonts.aurulent-sans-mono
 			];
 			fontconfig.defaultFonts = {
 				monospace = ["AurulentSansM Nerd Font" "DejaVu Sans Mono"];
