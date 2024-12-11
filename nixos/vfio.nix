@@ -6,9 +6,20 @@ let
 		"10de:1adb"
 	];
 in { config, lib, pkgs, ... }: {
-	systemd.tmpfiles.rules = [
-		"f /dev/shm/looking-glass 0660 zem kvm"
-	];
+	systemd = {
+		tmpfiles.rules = [
+			"f /dev/shm/looking-glass 0660 zem kvm"
+		];
+		services.start_vm = {
+			enable = true;
+			after = [ "network.target" ];
+			wantedBy = [ "multi-user.target" ];
+			description = "start virtual machine";
+			serviceConfig.ExecStart = ''
+			  ${pkgs.bash}/bin/sh -c '${pkgs.libvirt}/bin/virsh start `sed -n "s/.*start_vm=//p" /proc/cmdline | cut -d " " -f1`'
+			'';
+		};
+	};
 
 	nixpkgs.overlays = [ (final: prev: {
 		looking-glass-client = prev.looking-glass-client.overrideAttrs(
@@ -48,6 +59,7 @@ in { config, lib, pkgs, ... }: {
 			# enable IOMMU
 			"amd_iommu=on"
 			("vfio-pci.ids=" + lib.concatStringsSep "," gpuIDs)
+			"start_vm=nvidia-idle"
 		];
 	};
 
@@ -70,5 +82,11 @@ in { config, lib, pkgs, ... }: {
 		nvidiaSettings = true;
 		# Optionally, you may need to select the appropriate driver version for your specific GPU.
 		package = config.boot.kernelPackages.nvidiaPackages.stable;
+	};
+
+	specialisation.window_vm.configuration = {
+		boot.kernelParams = [
+			"start_vm=GamingVM"
+		];
 	};
 }
